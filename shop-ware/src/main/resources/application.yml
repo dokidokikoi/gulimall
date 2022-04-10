@@ -1,0 +1,18 @@
+server:
+  port: 11000
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://120.76.201.50:3306/gulimall_wms
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+logging:
+  level:
+    com.harukaze.shop: error
