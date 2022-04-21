@@ -1,14 +1,15 @@
 package com.harukaze.shop.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.harukaze.shop.product.entity.BrandEntity;
+import com.harukaze.shop.product.vo.BrandVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.harukaze.shop.product.entity.CategoryBrandRelationEntity;
 import com.harukaze.shop.product.service.CategoryBrandRelationService;
@@ -30,14 +31,38 @@ public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
 
+    @GetMapping("/catelog/list")
+    public R catelogList(@RequestParam Long brandId){
+        List<CategoryBrandRelationEntity> data = categoryBrandRelationService.list(
+                new LambdaQueryWrapper<CategoryBrandRelationEntity>().eq(
+                        CategoryBrandRelationEntity::getBrandId, brandId
+                )
+        );
+        return R.ok().put("data", data);
+    }
+
+    @RequestMapping("brands/list")
+    public R relationBrandList(@RequestParam(value = "catId", required = true) Long catId){
+        List<BrandEntity> entities = categoryBrandRelationService.getBrandbyCatId(catId);
+
+        List<BrandVo> vos = entities.stream().map(item -> {
+            BrandVo brandVo = new BrandVo();
+            brandVo.setBrandId(item.getBrandId());
+            brandVo.setBrandName(item.getName());
+            return brandVo;
+        }).collect(Collectors.toList());
+
+        return R.ok().put("data", vos);
+    }
+
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = categoryBrandRelationService.queryPage(params);
 
-        return R.ok().put("page", page);
+        return R.ok().put("data", page);
     }
 
 
@@ -48,7 +73,7 @@ public class CategoryBrandRelationController {
     public R info(@PathVariable("id") Long id){
 		CategoryBrandRelationEntity categoryBrandRelation = categoryBrandRelationService.getById(id);
 
-        return R.ok().put("categoryBrandRelation", categoryBrandRelation);
+        return R.ok().put("data", categoryBrandRelation);
     }
 
     /**
@@ -56,7 +81,7 @@ public class CategoryBrandRelationController {
      */
     @RequestMapping("/save")
     public R save(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
-		categoryBrandRelationService.save(categoryBrandRelation);
+		categoryBrandRelationService.saveDetail(categoryBrandRelation);
 
         return R.ok();
     }

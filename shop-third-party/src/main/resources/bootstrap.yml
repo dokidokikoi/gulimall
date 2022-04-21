@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: shop-third-party
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        extension-configs:
+          - data-id: oss.yaml
+            refresh: true
+      server-addr: localhost:8848

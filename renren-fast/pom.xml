@@ -9,9 +9,9 @@
 	<description>renren-fast</description>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.4.RELEASE</version>
+		<groupId>cn.haruakze.shop</groupId>
+		<artifactId>gulimall</artifactId>
+		<version>1.0</version>
 	</parent>
 
 	<properties>
@@ -51,6 +51,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.haruakze.shop</groupId>
+			<artifactId>shop-common</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
